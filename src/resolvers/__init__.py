@@ -1,5 +1,5 @@
-from src.resolvers.users import Query
+from src.resolvers.users import Query, Mutation
 import strawberry
 
 
-schema = strawberry.Schema(query=Query)
+schema = strawberry.Schema(query=Query, mutation=Mutation)
