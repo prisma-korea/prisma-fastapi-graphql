@@ -2,14 +2,12 @@ import os
 from src.prisma import prisma
 from src.apis import apis
 from src.resolvers import schema
+from src.utils.auth import decodeJWT
 
-from fastapi import FastAPI
 from strawberry.asgi import GraphQL as BaseGraphQL
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi import FastAPI
 from dotenv import load_dotenv
-from fastapi.middleware.gzip import GZipMiddleware
-
-from src.utils.auth import decodeJWT
 
 
 class GraphQL(BaseGraphQL):
