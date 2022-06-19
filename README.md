@@ -2,6 +2,9 @@
 
 [![CI](https://github.com/prisma-korea/prisma-fastapi-graphql/actions/workflows/main.yml/badge.svg)](https://github.com/prisma-korea/prisma-fastapi-graphql/actions/workflows/main.yml)
 
+## Blog Post
+- [Medium](https://medium.com/dooboolab/prisma-with-fastapi-and-graphql-1e55a27c4ac2)
+
 ## Setup virtual environment
 
 ```sh
