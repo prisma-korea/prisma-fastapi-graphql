@@ -2,13 +2,13 @@ import datetime
 import os
 from typing import List, Optional
 
-import jwt
 from src.models.User import AuthPayload, User
 from src.prisma import prisma
 import strawberry
 from src.models.scalars import Gender
 
 from src.permission import IsAuthenticated
+from src.utils.auth import signJWT
 
 
 @strawberry.type
@@ -58,7 +58,7 @@ class Mutation:
             }
         )
 
-        token = jwt.encode({"userId": user.id}, jwtSecret, algorithm="HS256")
+        token = signJWT(user.id)
 
         return AuthPayload(token=token, user=user)
 

@@ -1,5 +1,4 @@
 import os
-import jwt
 from src.prisma import prisma
 from src.apis import apis
 from src.resolvers import schema
@@ -10,6 +9,8 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 from fastapi.middleware.gzip import GZipMiddleware
 
+from src.utils.auth import decodeJWT
+
 
 class GraphQL(BaseGraphQL):
     async def get_context(self, request, response):
@@ -17,8 +18,7 @@ class GraphQL(BaseGraphQL):
         tokenIsPresent = headers.get('Authorization', False)
 
         if tokenIsPresent:
-            jwtSecret = os.environ.get('JWT_SECRET')
-            decoded = jwt.decode(tokenIsPresent, jwtSecret, algorithms="HS256")
+            decoded = decodeJWT(tokenIsPresent)
 
             if 'userId' in decoded:
                 return {
@@ -51,5 +51,4 @@ async def shutdown():
 
 @app.get("/")
 async def read_root():
-    users = await prisma.user.find_many()
-    return {"users": users}
+    return {"version": "1.0.0"}
