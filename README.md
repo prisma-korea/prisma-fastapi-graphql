@@ -1,5 +1,7 @@
 # Prisma FastApi GraphQL
 
+[![CI](https://github.com/prisma-korea/prisma-fastapi-graphql/actions/workflows/main.yml/badge.svg)](https://github.com/prisma-korea/prisma-fastapi-graphql/actions/workflows/main.yml)
+
 ## Install requirements
 
 ```sh
