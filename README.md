@@ -1,4 +1,4 @@
-# Prisma FastApi
+# Prisma FastApi GraphQL
 
 ## Install requirements
 
