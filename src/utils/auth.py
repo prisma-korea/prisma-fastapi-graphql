@@ -7,7 +7,7 @@ import os
 import bcrypt
 import jwt
 
-jwtSecret = os.environ.get('JWT_SECRET')
+jwtSecret = os.environ.get("JWT_SECRET")
 
 
 def signJWT(user_id: str) -> Dict[str, str]:
@@ -17,14 +17,14 @@ def signJWT(user_id: str) -> Dict[str, str]:
         "exp": EXPIRES,
         "userId": user_id,
     }
-    token = jwt.encode(payload, jwtSecret, algorithm='HS256')
+    token = jwt.encode(payload, jwtSecret, algorithm="HS256")
 
     return token
 
 
 def decodeJWT(token: str) -> dict:
     try:
-        decoded = jwt.decode(token, jwtSecret, algorithms=['HS256'])
+        decoded = jwt.decode(token, jwtSecret, algorithms=["HS256"])
         return decoded if decoded["expires"] else None
     except jwt.ExpiredSignatureError:
         print("Token expired. Get new one")
@@ -34,11 +34,11 @@ def decodeJWT(token: str) -> dict:
 
 
 def encryptPassword(password: str) -> str:
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
 def validatePassword(password: str, encrypted: str) -> str:
-    return bcrypt.checkpw(password.encode('utf-8'), encrypted.encode('utf-8'))
+    return bcrypt.checkpw(password.encode("utf-8"), encrypted.encode("utf-8"))
 
 
 class JWTBearer(HTTPBearer):
@@ -46,18 +46,21 @@ class JWTBearer(HTTPBearer):
         super(JWTBearer, self).__init__(auto_error=auto_error)
 
     async def __call__(self, request: Request):
-        credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
+        credentials: HTTPAuthorizationCredentials = await super(
+            JWTBearer, self
+        ).__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(
-                    status_code=403, detail="Invalid authentication scheme.")
+                    status_code=403, detail="Invalid authentication scheme."
+                )
             if not self.verify_jwt(credentials.credentials):
                 raise HTTPException(
-                    status_code=403, detail="Invalid token or expired token.")
+                    status_code=403, detail="Invalid token or expired token."
+                )
             return credentials.credentials
         else:
-            raise HTTPException(
-                status_code=403, detail="Invalid authorization code.")
+            raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
     def verify_jwt(self, jwtToken: str) -> bool:
         isTokenValid: bool = False

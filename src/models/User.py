@@ -17,6 +17,7 @@ class User:
     gender: Optional[Gender] = None
     phone: Optional[str] = None
 
+
 @strawberry.type
 class AuthPayload:
     token: str

@@ -19,19 +19,11 @@ class Query:
 
     @strawberry.field(permission_classes=[IsAuthenticated])
     def user(self, id: strawberry.ID) -> User:
-        return prisma.user.find_unique(
-            where={
-                "id": id
-            }
-        )
+        return prisma.user.find_unique(where={"id": id})
 
     @strawberry.field(permission_classes=[IsAuthenticated])
     def me(self, info) -> User:
-        return prisma.user.find_unique(
-            where={
-                "id": info.context['userId']
-            }
-        )
+        return prisma.user.find_unique(where={"id": info.context["userId"]})
 
 
 @strawberry.input
@@ -65,14 +57,16 @@ class Mutation:
 
     @strawberry.mutation
     def signUp(self, user: UserCreateInput) -> User:
-        user = prisma.user.create({
-            "email": user.email,
-            "password": encryptPassword(user.password),
-            "name": user.name,
-            "nickname": user.nickname,
-            "birthDay": user.birthday,
-            "gender": user.gender,
-            "phone": user.phone,
-        })
+        user = prisma.user.create(
+            {
+                "email": user.email,
+                "password": encryptPassword(user.password),
+                "name": user.name,
+                "nickname": user.nickname,
+                "birthDay": user.birthday,
+                "gender": user.gender,
+                "phone": user.phone,
+            }
+        )
 
         return user
