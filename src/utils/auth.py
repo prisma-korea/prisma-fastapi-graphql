@@ -1,10 +1,11 @@
 from datetime import time
-import os
 from typing_extensions import Self
-import jwt
 from typing import Dict
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import os
+import bcrypt
+import jwt
 
 jwtSecret = os.environ.get('JWT_SECRET')
 
@@ -25,6 +26,14 @@ def decodeJWT(token: str) -> dict:
         return decoded if decoded["expires"] >= time().second else None
     except:
         return {}
+
+
+def encryptPassword(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+
+def validatePassword(password: str, encrypted: str) -> str:
+    return bcrypt.checkpw(password.encode('utf-8'), encrypted.encode('utf-8'))
 
 
 class JWTBearer(HTTPBearer):
