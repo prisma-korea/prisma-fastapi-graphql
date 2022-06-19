@@ -2,6 +2,13 @@
 
 [![CI](https://github.com/prisma-korea/prisma-fastapi-graphql/actions/workflows/main.yml/badge.svg)](https://github.com/prisma-korea/prisma-fastapi-graphql/actions/workflows/main.yml)
 
+## Setup virtual environment
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+```
+
 ## Install requirements
 
 ```sh
@@ -9,6 +16,7 @@ pip install -r requirements.txt
 ```
 
 ## Setup environment
+
 1. cp `.env.sample` `.env`
 2. Include `DATABASE_URL`
    ```
