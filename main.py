@@ -28,7 +28,9 @@ class GraphQL(BaseGraphQL):
 
 
 load_dotenv()
-graphql_app = GraphQL(schema)
+isProduction = os.getenv("IS_PRODUCTION", False)
+
+graphql_app = GraphQL(schema, graphiql=False if isProduction else True)
 
 app = FastAPI()
 app.add_middleware(GZipMiddleware, minimum_size=1000)
