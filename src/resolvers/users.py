@@ -1,5 +1,5 @@
 import datetime
-import os
+from tkinter.messagebox import NO
 from typing import List, Optional
 
 from src.models.User import AuthPayload, User
@@ -8,7 +8,7 @@ import strawberry
 from src.models.scalars import Gender
 
 from src.permission import IsAuthenticated
-from src.utils.auth import signJWT
+from src.utils.auth import encryptPassword, signJWT, validatePassword
 
 
 @strawberry.type
@@ -49,24 +49,25 @@ class UserCreateInput:
 class Mutation:
     @strawberry.mutation
     async def signIn(self, email: str, password: str) -> AuthPayload:
-        jwtSecret = os.environ.get('JWT_SECRET')
-
         user = await prisma.user.find_first(
             where={
                 "email": email,
-                "password": password,
             }
         )
 
-        token = signJWT(user.id)
+        validated = validatePassword(password, user.password)
 
-        return AuthPayload(token=token, user=user)
+        if validated:
+            token = signJWT(user.id)
+            return AuthPayload(token=token, user=user)
+
+        return None
 
     @strawberry.mutation
     def signUp(self, user: UserCreateInput) -> User:
         user = prisma.user.create({
             "email": user.email,
-            "password": user.password,
+            "password": encryptPassword(user.password),
             "name": user.name,
             "nickname": user.nickname,
             "birthDay": user.birthday,
